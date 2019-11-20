@@ -1,0 +1,19 @@
+module DNA (toRNA) where
+
+complement :: Char -> Either Char Char
+complement c 
+  | c == 'A' = Right 'U'
+  | c == 'C' = Right 'G'
+  | c == 'G' = Right 'C'
+  | c == 'T' = Right 'A'
+  | otherwise = Left c
+
+toRNA :: String -> Either Char String
+toRNA x = traverse complement x
+
+main :: IO()
+main = do
+    print $ toRNA ""
+    print $ toRNA "ACTG"
+    print $ toRNA "ABCDEFG"
+    print("***")

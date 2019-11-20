@@ -1,0 +1,86 @@
+--jmhain's solution
+
+module DNA
+  ( nucleotideCounts
+  , Nucleotide(..)
+  ) where
+
+import Data.Map (Map)
+import Data.Map.Strict (fromList, insertWith)
+
+data Nucleotide
+  = A
+  | C
+  | G
+  | T
+  deriving (Eq, Ord, Show)
+
+nucleotideFromChar :: Char -> Either String Nucleotide
+nucleotideFromChar 'A' = Right A
+nucleotideFromChar 'C' = Right C
+nucleotideFromChar 'G' = Right G
+nucleotideFromChar 'T' = Right T
+nucleotideFromChar c = Left ("Invalid nucleotide " ++ [c])
+
+nucleotideCounts :: String -> Either String (Map Nucleotide Int)
+nucleotideCounts [] = Right $ fromList [(A, 0), (C, 0), (G, 0), (T, 0)]
+  -- Just creates the empty base case of a Map to count the nucs
+nucleotideCounts (c:dna) = do
+  counts <- nucleotideCounts dna 
+    -- will recurse all the way to "" then work back toward beginning of string
+  nucleotide <- nucleotideFromChar c  
+    -- really, only function is error checking
+  return $ insertWith (+) nucleotide 1 counts 
+    -- bumps count for that nucleotide
+
+main :: IO()
+main = do
+  print("*****")
+
+
+---- My Feeble Efforts ! ---
+
+--it "counts all nucleotides" $
+--              nucleotideCounts --"AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC"
+--              `matchesMap` [ (A, 20)
+--                           , (C, 12)
+--                           , (G, 17)
+--                           , (T, 21) ]
+
+s = "AATTTCCCCGGGGG"
+v = map oneNuc s
+v2 = map oneNuc (s ++ "X")
+
+oneNuc :: Char -> Either Char Char
+oneNuc c
+  | c `elem` "ACTG" = Right c
+  | otherwise = Left c
+
+-- count characters = foldr (\y x  -> x+1) 0 s
+nucleotideCounts :: String -> Int
+nucleotideCounts "" = 0
+
+xfilter ::  (b -> Bool) -> [Either a b] -> [Either a b]
+xfilter f [] = []
+xfilter f (x:xs) =
+  case x of
+    Left x -> [Left x] 
+    Right x -> (Right x) : xfilter f xs
+  --  otherwise -> xfilter f xs
+
+
+ncounts :: String -> Char -> Either String (Char, Int)
+ncounts [] c = Right (c, 0)
+ncounts xs c = Right $ (c, foldr (\y x -> x+1) 0 $ filter ( == Right c) (map oneNuc s))
+
+isLeft :: (Either a b) -> Bool
+isLeft (Left x) = True
+isLeft x = False
+
+--map oneNuc s ==> [Right 'A',Right 'A',Right 'T',Right 'T',Right 'T',Right 'C',Right 'C',Right 'C',Right 'C',Right 'G',Right 'G',Right 'G',Right 'G',Right 'G']
+
+-- traverse oneNuc s => => Right "AATTTCCCCGGGGG"
+
+main :: IO()
+main = do
+  print "***"

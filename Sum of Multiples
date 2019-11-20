@@ -1,0 +1,17 @@
+module SumOfMultiples (sumOfMultiples) where
+import Data.List
+
+sumOfMultiples :: [Integer] -> Integer -> Integer
+sumOfMultiples a b = sum $ allMultiples a b
+
+allMultiples :: [Integer] -> Integer -> [Integer]
+allMultiples a b = nub . concat $ map (multiplesN b) a
+
+multiplesN :: Integer -> Integer -> [Integer]
+multiplesN _ 0 = [0]
+multiplesN 1 _ = [1]
+multiplesN i j = [j, j*2 .. i-1]
+
+main :: IO()
+main = do
+  print("*****")

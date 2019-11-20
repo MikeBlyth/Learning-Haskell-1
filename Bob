@@ -1,0 +1,46 @@
+-- Bob
+module Bob (responseFor) where
+
+responseFor :: String -> String
+responseFor x
+  | aSilence x = "Fine. Be that way!"
+  | aForcefulQuestion x = "Calm down, I know what I'm doing!"
+  | allUpper x = "Whoa, chill out!"
+  | aQuestion x = "Sure."
+  | otherwise = "Whatever."
+
+allUpper :: String -> Bool
+allUpper s = (any cIsUpper s) && not (any cIsLower s)
+
+cIsUpper :: Char -> Bool
+cIsUpper x =  (x >= 'A') && (x <= 'Z')
+
+cIsLower :: Char -> Bool
+cIsLower x =  (x >= 'a') && (x <= 'z')
+
+aQuestion :: String -> Bool
+aQuestion "" = False
+aQuestion x = last (trim x) == '?'
+
+aSilence :: String -> Bool
+aSilence "" = True
+aSilence s = (trim s == "")
+
+aForcefulQuestion :: String -> Bool
+aForcefulQuestion s = (aQuestion s) && (allUpper s)
+
+trim :: String -> String
+trim "" = ""
+trim s = [ x | x <- s, not (elem x whitespace)]
+    where whitespace =  ['\t', ' ', '\n', '\r']
+
+assertEqual :: String -> String -> String
+assertEqual a b
+  | a /= b = error ("Expected " ++ a ++ " but got " ++ b)
+  | otherwise = "OK"
+
+main :: IO()
+main = do
+  let x = assertEqual  "Whatever." (responseFor "Hi")
+  print(x)
+  print(responseFor "Hi")

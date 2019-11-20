@@ -1,0 +1,29 @@
+module Diamond (diamond) where
+
+diamond :: Char -> Maybe [String]
+diamond c
+  | c `elem` ['A'..'Z'] = Just $ half ++ reverse (init half)
+  | otherwise = Nothing
+  where half = halfDiamond c
+
+halfDiamond :: Char -> [String]
+halfDiamond c = map (charToLine (lineLength c)) ['A' .. c]
+
+charToNum :: Char -> Int 
+charToNum c = fromEnum c - fromEnum 'A'
+
+lineLength :: Char -> Int
+lineLength c = 2 * (charToNum c) + 1
+
+lineMiddle :: Int -> Int
+lineMiddle len = div len 2
+
+charPos :: Int -> Char -> [Int]
+charPos len c
+  | c == 'A' = [middle]
+  | otherwise = [middle-charToNum c, middle+charToNum c]
+  where middle = lineMiddle len
+
+charToLine :: Int -> Char -> String
+charToLine len c = (map (\x -> if x `elem` (charPos len c) then c else ' ') [0..len-1])
+

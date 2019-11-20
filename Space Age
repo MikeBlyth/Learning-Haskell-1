@@ -1,0 +1,33 @@
+-- Space Age
+import qualified Data.List as L
+
+data Planet = Mercury | Venus | Earth | Mars | Jupiter | Saturn | Uranus | Neptune deriving (Eq, Show)
+
+data PlanetYear = PlanetYear { planet :: Planet, duration :: Float} deriving (Eq, Show)
+
+yearTable = [PlanetYear {planet = Mercury, duration = 0.2408467}
+          , PlanetYear {planet = Venus, duration = 0.61519726}
+          , PlanetYear {planet = Earth, duration = 1.0}
+          , PlanetYear {planet = Mars, duration = 1.8808158}
+          , PlanetYear {planet = Jupiter, duration = 11.862615}
+          , PlanetYear {planet = Saturn, duration = 29.447498}
+          , PlanetYear {planet = Uranus, duration = 84.016846}
+          , PlanetYear {planet = Neptune, duration = 164.79132}
+            ]
+
+earthYearSeconds = 31557600.0
+
+getDuration :: Maybe PlanetYear -> Float
+getDuration Nothing = 0/0
+getDuration (Just py) = duration py
+
+ageOn :: Planet -> Float -> Float
+ageOn selectedPlanet ageSeconds = earthYears / planetYears 
+    where earthYears = ageSeconds / earthYearSeconds
+          p = L.find (\x -> planet x == selectedPlanet) yearTable
+          planetYears = getDuration p
+
+main :: IO()
+main = do
+  let p =  Earth
+  print $ ageOn Venus 31557600.0

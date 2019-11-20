@@ -1,0 +1,27 @@
+-- Panagram
+-- Given a string, see if it contains all letters
+import qualified Data.List as L
+import qualified Data.Char as C
+
+str = "The quick brown fox jumps over the lazy dog."
+
+
+lowerLetters :: String -> String -- change to lower case and accept only a-z
+lowerLetters s = [ C.toLower x | x <- s, (C.toLower x <= 'z') && (C.toLower x >= 'a')]
+
+s = L.sort $ lowerLetters str
+
+dedup :: String -> String  -- removed duplicate letters from a sorted string
+dedup [] = []
+dedup [x] = [x]
+dedup (x:xs) = 
+  if x == head xs -- is this char the same as the next one?
+  then dedup xs -- 
+  else x : dedup xs
+
+isPangram :: String -> Bool
+isPangram s = (dedup $ L.sort (lowerLetters s)) == ['a'..'z']
+
+main :: IO()
+main = do
+  print("*****")

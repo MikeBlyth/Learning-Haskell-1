@@ -1,0 +1,19 @@
+module ArmstrongNumbers (armstrong) where
+-- An Armstrong number is a number that is the sum of its own digits each raised to the power of the number of digits.
+-- 9 is an Armstrong number, because 9 = 9^1 = 9
+-- 10 is not an Armstrong number, because 10 != 1^2 + 0^2 = 1
+
+
+armstrong :: Integer -> Bool
+armstrong a = 
+  let str = show a 
+      exp = length str
+      in 
+  a == (foldl (\y x -> x^exp + y) 0 $ map (\x -> read [x] :: Integer) $ str)
+
+
+
+
+main :: IO()
+main = do
+  print("*****")

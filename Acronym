@@ -1,0 +1,54 @@
+module Acronym (abbreviate) where
+import Data.Char (toUpper)
+
+abbreviate :: String -> String
+abbreviate "" = ""
+abbreviate s = makeAcro $ fst (chunkify ([""], s))
+
+chunkify :: ([String], String) -> ([String], String)
+-- ([], ""ABCdef-port prelude") -> (["A"], "BCdef-port prelude")
+chunkify ([""], x:xs) = chunkify ([[x]], xs)
+chunkify (pieces,"") = (pieces, "")
+chunkify (pieces, (x:xs))
+  | (ctype $ last lastWord) == (ctype x) = chunkify ((init pieces) ++ [lastWord ++ [x]], xs)
+  | (ctype $ last lastWord) == Upper && (ctype x == Lower) = chunkify ((init pieces) ++ [lastWord ++ [x]], xs)
+  | (ctype x == Delim) = chunkify(pieces++["!"], xs)
+  | otherwise = chunkify (pieces ++ [[x]], xs)
+  where lastWord = last pieces
+
+makeAcro :: [String] -> String
+makeAcro [""] = ""
+makeAcro strings = foldl (\acro x -> acro ++ wordInit x) "" strings
+
+isAlpha :: Char -> Bool
+isAlpha x = x `elem` ['A' .. 'Z'] ++ ['a' .. 'z']
+
+wordInit :: String -> String  -- Upper case the beginning of the word if it's alpha
+wordInit s 
+  | isAlpha $ head s = [toUpper (head s)]
+  | otherwise = ""
+
+data CharType = Delim | Upper | Lower | Digit deriving (Show, Eq)
+
+ctype :: Char -> CharType
+ctype a 
+  | a `elem` ['a' .. 'z'] ++ ['\''] ++ ['0' .. '9']  = Lower -- apos and digits treated as ordinary chars
+  | a `elem` ['A' .. 'Z'] = Upper
+  | a `elem` ".,;-_ +!" = Delim
+  | otherwise = Delim
+
+main :: IO()
+main = do
+  print("*****")
+
+--------------============== Solution by SkaeX
+
+--module Acronym (abbreviate) where
+--import Data.Char
+
+--abbreviate :: String -> String
+--abbreviate xs = map (\(x:_) -> toUpper x) . map (filter isAlpha) . words . map (\x -> if x == '-' then ' ' else x) . padder $ xs 
+
+--padder :: String -> String
+--padder = foldl (\acc x -> if isUpper x && isLower (last acc) then acc ++ " " ++ [x] else acc ++ [x]) " "
+--
