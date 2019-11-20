@@ -1,8 +1,10 @@
---Grade School
+module Hamming (distance) where
 
-data Student = Student { name :: String, grade :: Int} deriving (Eq, Show)
+distance :: String -> String -> Maybe Int
+distance a b
+  | length a == length b = Just (sum $ zipWith (\x y -> if x == y then 0 else 1) a b)
+  | otherwise = Nothing
 
-add
-empty
-grade
-sorted
+main :: IO()
+main = do
+  print("*****")
