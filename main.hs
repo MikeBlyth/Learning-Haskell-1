@@ -1,5 +1,5 @@
 module School (School, add, empty, grade, sorted) where
-
+import Data.List (sort, sortBy, nub)
 --data Student = Student (Int, String) deriving (Show, Eq)
 
 --data School = School [(Int, String)] deriving (Show)
@@ -9,25 +9,33 @@ type Grade = Int
 type Student = (Grade, Name)
 type School = [Student]
 
-joe = (6,"Joe") :: Student
-sam = (5, "Sam") :: Student
-beth = (2,"Beth") :: Student
-
-sc = [joe, sam]
-
 add :: Grade -> Name -> School -> School
 add gradeNum name school = student : school
   where student = (gradeNum, name) :: Student
-  --add gradeNum student school = empty
 
 empty :: [Student]
 empty = []
 
+gradesList :: School -> [Grade]
+gradesList school = sort $ nub [grade | (grade, student) <- school]
+
 grade :: Grade -> School -> [Name]
-grade gradeNum school = [(grade, name) | (grade, name) <- school, grade==gradeNum] 
+grade gradeNum school = sort $ [name| (grade, name) <- school, grade==gradeNum] 
+
+gradeWNames :: Grade -> School -> (Grade, [Name])
+gradeWNames gradeNum school = (gradeNum, grade gradeNum school)
 
 sorted :: School -> [(Grade, [Name])]
-sorted school = error "You need to implement this function."
+sorted school = map (\x -> gradeWNames x school) (gradesList school)
+--sorted school = []
+
+---------------------- TEST STUFF ----------
+joe = (6,"Joe") :: Student
+sam = (5, "Sam") :: Student
+beth = (2,"Beth") :: Student
+zoey = (2,"Zoey") :: Student
+
+sc = [joe, sam, beth, zoey]
 
 main :: IO()
 main = do

@@ -1,13 +1,77 @@
---Grade School
+module School (School, add, empty, grade, sorted) where
+import Data.List (sort, sortBy, nub)
+--data Student = Student (Int, String) deriving (Show, Eq)
 
-data Student = Student { name :: String, grade :: Int} deriving (Eq, Show)
+--data School = School [(Int, String)] deriving (Show)
 
---add
---empty
---grade
---sorted
+type Name = String
+type Grade = Int
+type Student = (Grade, Name)
+type School = [Student]
 
+add :: Grade -> Name -> School -> School
+add gradeNum name school = student : school
+  where student = (gradeNum, name) :: Student
+
+empty :: [Student]
+empty = []
+
+gradesList :: School -> [Grade]
+gradesList school = sort $ nub [grade | (grade, student) <- school]
+
+grade :: Grade -> School -> [Name]
+grade gradeNum school = sort $ [name| (grade, name) <- school, grade==gradeNum] 
+
+gradeWNames :: Grade -> School -> (Grade, [Name])
+gradeWNames gradeNum school = (gradeNum, grade gradeNum school)
+
+sorted :: School -> [(Grade, [Name])]
+sorted school = map (\x -> gradeWNames x school) (gradesList school)
+--sorted school = []
+
+---------------------- TEST STUFF ----------
+joe = (6,"Joe") :: Student
+sam = (5, "Sam") :: Student
+beth = (2,"Beth") :: Student
+zoey = (2,"Zoey") :: Student
+
+sc = [joe, sam, beth, zoey]
 
 main :: IO()
 main = do
   print("*****")
+
+{- SPECS
+          let fromList = foldr (uncurry add) empty
+          let fromGrade g = fromList . zip (repeat g)
+
+          it "add student" $
+            sorted (add 2 "Aimee" empty) `shouldBe` [(2, ["Aimee"])]
+
+          it "add more students in same class" $
+            sorted (fromGrade 2 ["James", "Blair", "Paul"])
+            `shouldBe` [(2, ["Blair", "James", "Paul"])]
+
+          it "add students to different grades" $
+            sorted (fromList [(3, "Chelsea"), (7, "Logan")])
+            `shouldBe` [(3, ["Chelsea"]), (7, ["Logan"])]
+
+          it "empty list if no students" $
+            sorted empty `shouldBe` []
+
+          it "get students in a grade" $
+            grade 5 (fromList [(5, "Franklin"), (5, "Bradley"), (1, "Jeff")])
+            `shouldBe` ["Bradley", "Franklin"]
+
+          it "get students in a non-existent grade" $
+            grade 1 empty `shouldBe` []
+
+          it "sorted school" $
+            sorted (fromList [ (4, "Jennifer"   )
+                             , (6, "Kareem"     )
+                             , (4, "Christopher")
+                             , (3, "Kyle"       ) ] )
+            `shouldBe` [ (3, ["Kyle"                   ] )
+                       , (4, ["Christopher", "Jennifer"] )
+                       , (6, ["Kareem"                 ] ) ]
+-}
