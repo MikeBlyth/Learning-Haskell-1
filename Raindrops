@@ -1,4 +1,4 @@
--- Raindrops
+-- Raindrops -- not set for running tests and not optimized
 import Data.List
 
 rainmap = [(3,"Pling"), (5, "Plang"), (7,"Plong")]
