@@ -1,0 +1,29 @@
+module PerfectNumbers (classify, Classification(..)) where
+import Data.List (sort, nub)
+
+data Classification = Deficient | Perfect | Abundant deriving (Eq, Show)
+
+lowFactors :: Integer -> [Integer]
+-- get the factors that are less than or equal to square root of N
+lowFactors n = [x | x <- [1..limit], mod n x == 0 ]
+  where limit = floor  . sqrt $ fromIntegral n
+
+compFactors :: Integer -> [Integer] -> [Integer]
+-- get the complementary factors to those low factors
+compFactors n factors = map (div n) factors
+
+factors ::  Integer -> [Integer]
+-- combine high and low factors, remove duplicate (only occurs with perfect square)
+factors n = nub . sort $ low ++ (compFactors n low)
+  where low = lowFactors n
+
+factorSum :: Integer -> Integer
+-- get the sum of the factors to compare with N
+factorSum n = sum $ init (factors n)
+
+classify :: Integer -> Maybe Classification
+classify n =
+  if n < 1 then Nothing else case (compare n (factorSum n)) of
+    LT -> Just Abundant
+    EQ -> Just Perfect
+    GT -> Just Deficient

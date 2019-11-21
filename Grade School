@@ -1,8 +1,5 @@
 module School (School, add, empty, grade, sorted) where
 import Data.List (sort, sortBy, nub)
---data Student = Student (Int, String) deriving (Show, Eq)
-
---data School = School [(Int, String)] deriving (Show)
 
 type Name = String
 type Grade = Int
@@ -27,7 +24,6 @@ gradeWNames gradeNum school = (gradeNum, grade gradeNum school)
 
 sorted :: School -> [(Grade, [Name])]
 sorted school = map (\x -> gradeWNames x school) (gradesList school)
---sorted school = []
 
 ---------------------- TEST STUFF ----------
 joe = (6,"Joe") :: Student
