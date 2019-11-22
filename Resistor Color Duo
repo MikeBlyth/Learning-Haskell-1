@@ -1,0 +1,24 @@
+-- Resistors 2
+import Data.List 
+
+colorValues = [("Black", 0), ("Brown", 1), ("Red", 2), ("Orange", 3), ("Yellow", 4),
+    ("Green", 5), ("Blue", 6), ("Violet", 7), ("Grey", 8), ("White", 9)]
+
+inputColors = ["Red", "Blue", "Grey"]
+
+decodeColors :: [String] -> Maybe Int 
+decodeColors [] = Nothing
+decodeColors [""] = Nothing
+decodeColors [x] = Nothing
+decodeColors (a:b:cs) = fmap (+) (fmap (10*) (colorVal a)) <*> (colorVal b)
+
+colorVal :: String -> Maybe Int
+colorVal a = lookup a colorValues 
+
+
+-- May get (Just n) or Nothing, need to return n or -1
+
+main = do
+  print (decodeColors inputColors)
+  print("*****")
+

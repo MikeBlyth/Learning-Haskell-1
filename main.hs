@@ -1,25 +1,6 @@
--- Raindrops
-import Data.List
-
-rainmap = [(3,"Pling"), (5, "Plang"), (7,"Plong")]
-
-rainkeys = map (\(k, v) -> k) rainmap 
-
-raindrops :: Int -> String
-raindrops n
-  | stringResult > "" = stringResult
-  | otherwise = show n
-  where stringResult = mayppend $ raw1 n
-
-raw1 :: Int -> [Maybe String]
-raw1 n = map (\x -> if (mod n x == 0) then (lookup x rainmap) else Nothing) rainkeys
-
-mayppend :: [Maybe String] -> String
-mayppend [] = ""
-mayppend (Nothing : xs) = mayppend xs
-mayppend ((Just x) : xs) = x ++ mayppend xs
 
 
 main = do
+  print (decodeColors inputColors)
   print("*****")
 
