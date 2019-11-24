@@ -1,0 +1,27 @@
+module ETL (transform) where
+
+import Data.Map (Map, fromList, toList)
+import Data.Char (toLower)
+--import qualified Data.Map as M (lookup, map) 
+
+
+transform :: Map a String -> Map Char a
+--transform x = fromList . concat $ foldl (\a b -> strToList b : a) [] (toList x)
+transform x = fromList $ concatMap strToList (toList x)
+
+strToList :: (a, String) -> [(Char, a)] -- e.g. (3, "BCMP") -> [('b',3), ('c',3)...]
+strToList (val, s) = map (\c -> (toLower c, val)) s
+
+e1 = fromList [(1, "AEIOU")]
+efull = fromList [ ( 1, "AEIOULNRST")
+                 , ( 2, "DG"        )
+                 , ( 3, "BCMP"      )
+                 , ( 4, "FHVWY"     )
+                 , ( 5, "K"         )
+                 , ( 8, "JX"        )
+                 , (10, "QZ"        ) ]
+
+
+main = do
+  print("*****")
+

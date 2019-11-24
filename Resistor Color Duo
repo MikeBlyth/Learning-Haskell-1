@@ -1,24 +1,40 @@
 -- Resistors 2
-import Data.List 
+  import Data.List 
+  import Data.Maybe
 
-colorValues = [("Black", 0), ("Brown", 1), ("Red", 2), ("Orange", 3), ("Yellow", 4),
-    ("Green", 5), ("Blue", 6), ("Violet", 7), ("Grey", 8), ("White", 9)]
+  data Color =
+      Black
+    | Brown
+    | Red
+    | Orange
+    | Yellow
+    | Green
+    | Blue
+    | Violet
+    | Grey
+    | White
+    deriving (Show, Enum, Eq, Bounded)
 
-inputColors = ["Red", "Blue", "Grey"]
+  type ColorTriplet = (Color, Color, Color)
 
-decodeColors :: [String] -> Maybe Int 
-decodeColors [] = Nothing
-decodeColors [""] = Nothing
-decodeColors [x] = Nothing
-decodeColors (a:b:cs) = fmap (+) (fmap (10*) (colorVal a)) <*> (colorVal b)
+  colorValues :: [(Color, Integer)]
+  colorValues = [(Black, 0), (Brown, 1), (Red, 2), (Orange, 3), (Yellow, 4),
+      (Green, 5), (Blue, 6), (Violet, 7), (Grey, 8), (White, 9)]
 
-colorVal :: String -> Maybe Int
-colorVal a = lookup a colorValues 
+  colorVal :: Color -> Integer -- color value of one band
+  colorVal a = fromJust (lookup a colorValues)
 
+  value :: (Color, Color) -> Integer 
+  decodeTwo (a, b) = 10*colorVal a + colorVal b
 
--- May get (Just n) or Nothing, need to return n or -1
+---------- TESTING -------------------------
+r1 = (Red, Blue)
+r2 = (Yellow, Green)
+
+q = lookup Green cMult 
+v = decodeTwo (bands r1)
+b = bands r1
 
 main = do
-  print (decodeColors inputColors)
+  print v
   print("*****")
-
