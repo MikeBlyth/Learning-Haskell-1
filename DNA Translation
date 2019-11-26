@@ -1,0 +1,46 @@
+import Data.Map as M
+import Data.Maybe
+
+codonVals :: [(Codon,AA)]
+
+codonVals = [
+  ("AUG", "Methionine"),
+  ("UUU", "Phenylalanine"),
+  ("UUC", "Phenylalanine"),
+  ("UUA", "Leucine"),
+  ("UUG", "Leucine"),
+  ("UCU", "Serine"), 
+  ("UCC", "Serine"), 
+  ("UCA", "Serine"), 
+  ("UCG", "Serine"),
+  ("UAU", "Tyrosine"), 
+  ("UAC", "Tyrosine"),
+  ("UGU", "Cysteine"), 
+  ("UGC", "Cysteine"),
+  ("UGG", "Tryptophan"),
+  ("UAA", "STOP"), 
+  ("UAG", "STOP"), 
+  ("UGA", "STOP")]
+
+cv = fromList codonVals
+
+trCodon :: Codon -> AA
+trCodon x 
+  | isJust val = fromJust val
+  | otherwise = error "Invalid codon " ++ x
+  where val = M.lookup x cv
+
+translate :: DNA -> [AA]
+translate [] = []
+translate (x:y:z:xs) = 
+    case trCodon(x:y:z:[]) of
+      "STOP" -> []
+      otherwise -> trCodon (x:y:z:[]) : translate xs
+
+type DNA = String
+type AA = String
+type Codon = String
+
+
+main = do
+  print("*****")
