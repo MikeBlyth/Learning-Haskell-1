@@ -4,23 +4,22 @@
 If the result is 0, then it is a valid ISBN-10, otherwise it is
 invalid.-}
 
-import Data.Maybe
 
-i = "3-598-21508-8"  -- for testing
-idig = digits i      -- for testing
-
-mults = [10,9..1]
-
-digits :: String -> String
-digits s = filter (\x -> x `elem` "0123456789X") s
+check :: String -> Bool
+check s 
+  | not $ all (`elem` (validDigits ++ " -")) s = False
+  | length digits /= 10 = False
+  | elem 'X' (init digits) = False
+  | otherwise = 0 == mod (sum $ zipWith (*) mults (map val digits)) 11
+  where validDigits =  "0123456789X"
+        digits = filter (`elem` validDigits) s 
+        mults = [10,9..1]
 
 val :: Char -> Int
 val c
   | c `elem` ['0' .. '9'] = read [c] :: Int
   | c == 'X' = 10
-
-check :: String -> Bool
-check s = 0 == mod (sum $ zipWith (*) mults (map val (digits s))) 11
+  | otherwise = error "program error - val should not receive invalid character"
 
 main = do
   print (check i)
