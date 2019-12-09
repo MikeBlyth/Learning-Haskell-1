@@ -1,5 +1,5 @@
 module Robot where
-
+-- ** NOT YET SET UP FOR EXERCISM TESTS
 type RobotPos = (Int, Int, Int)
 
 moveRobot :: RobotPos -> String -> RobotPos
@@ -22,29 +22,3 @@ advance (rotation, x, y) =
 
 main = do 
     print "***"
-
-
-
-
-{-
-import Control.Monad
-import Control.Monad.State
-
-a = [1,2,3]
-a2 = [4,5,6]
-b = ["cat", "dog", "mouse"]
-
-f1 a = Just (show a)
-f2 a = Just (a ++ "!")
-
-type Stack = [Int] 
-
-pop :: State Stack Int  
-pop = State $ \(x:xs) -> (x,xs)  
-  
-push :: Int -> State Stack ()  
-push a = State $ \xs -> ((),a:xs) 
-
-main = do
-  print("*****")
--}
