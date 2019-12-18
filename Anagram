@@ -1,0 +1,13 @@
+module Anagram where
+import Data.List
+
+testWord = "listen"
+testPoss = ["enlists", "google", "inlets", "banana"]
+
+anagram :: String -> [String] -> [String]
+anagram word poss = [x | x <- poss, sort x == sort word]
+
+main = do 
+    print (anagram testWord testPoss)
+    print "***"
+
